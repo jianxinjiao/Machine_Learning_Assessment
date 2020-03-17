@@ -1,0 +1,26 @@
+.idea/
+.eggs/
+.RData
+.Rhistory
+*.gz
+*.tgz
+*.pyc
+.DS_Store
+scripts/*.ver
+__pycache__
+*.egg-info
+dist
+build
+.Rproj.user
+temp
+/R-pkg/NAMESPACE
+.cache
+*.bak
+.Rapp.history
+*.hdf5
+/pypi
+.pytest_cache
+.coverage
+
+# pipenv
+Pipfile.lock
