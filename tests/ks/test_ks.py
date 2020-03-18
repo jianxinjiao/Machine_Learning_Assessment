@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from Roc.roc_curve import get_roc_curve
+from Ks.ks_curve import get_ks_curve
 from exceptions import AssessmentValueException
 
 
@@ -13,11 +13,11 @@ class MyTestCase(TestCase):
 
     def test_get_roc_curve(self):
         # 测试roc曲线，标签与概率不等长的情况
-        self.assertRaises(AssessmentValueException, get_roc_curve, self.labels, self.error_rates)
+        self.assertRaises(AssessmentValueException, get_ks_curve, self.labels, self.error_rates)
         # 测试roc曲线
-        fpr, tpr, thre, roc_auc, Gini = get_roc_curve(self.labels, self.rates)
+        fpr, tpr, thre, ks = get_ks_curve(self.labels, self.rates)
         # 测试标签非0 1 的情况
-        fpr, tpr, thre, roc_auc, Gini = get_roc_curve(self.pos_label, self.rates, pos_label='T')
+        fpr, tpr, thre, ks = get_ks_curve(self.pos_label, self.rates, pos_label='T')
 
     def tearDown(self):
         pass
