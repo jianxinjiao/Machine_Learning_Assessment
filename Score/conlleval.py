@@ -4,7 +4,7 @@ from collections import Counter
 import numpy as np
 import pandas as pd
 
-from exceptions import AssessmentSavePathException
+from exceptions import AssessmentSavePathException, AssessmentValueException
 
 
 def get_label_data(file_dir):
@@ -49,10 +49,11 @@ def matrix_func(true_list, pre_list, labels2idx, confMatrix):
 def create_confusion_matrix(file_dir, type='1'):
     """
     创建混淆矩阵，分为多种类型：
-    1、普通多分类问题，标签预测正确或者预测为其他标签；
-    2、数据像BIOES标注问题，标签错位现象；
-    3、待定；
+    '1' --> 普通多分类问题，标签预测正确或者预测为其他标签；
+    '2' --> 数据像BIOES标注问题，标签错位现象；
+    '3' --> 待定；
     :param file_dir: 数据文件路径
+    :param type: 计算的类型，str
     :return: 返回混淆矩阵及标签id字典
     """
     true_labels, predict_labels = get_label_data(file_dir)
@@ -81,8 +82,6 @@ def create_confusion_matrix(file_dir, type='1'):
                 true_list = [label]  # 存储新标签
 
         return (confMatrix, labels2idx)
-    else:
-        raise ValueError('请根据需要输入正确 type 值')
 
 
 def calculate_all_prediction(confMatrix, total_sum):
@@ -146,13 +145,15 @@ def confusion_matrix_score(file_dir, type='1', save_res_dir=''):
     :param save_res_dir: 结果默认打印，如果输入地址，结果将保存此地址，且保存为csv格式
     :return:
     """
+    if type not in ['1', '2']:
+        raise AssessmentValueException('请根据需要输入正确 type 值')
     if save_res_dir:
         if save_res_dir.split('.')[-1] != 'csv':
             raise AssessmentSavePathException('保存文件为csv文件，请检查保存地址是否符合规定！')
     res_list = list()  # 用于保存结果
     # 获取文件并返回混淆矩阵和标签字典
     confMatrix, label2idx = create_confusion_matrix(file_dir, type=type)
-    total_sum = confMatrix.sum()  # 数据总量
+    total_sum = int(confMatrix.sum())  # 数据总量
     all_prediction = calculate_all_prediction(confMatrix, total_sum)
     res_list.append([f'数据总数：{total_sum}'])
     res_list.append([f'标签数量：{len(label2idx)}'])
